@@ -1,0 +1,7 @@
+time t
+int8 x1
+int8 y1
+int8 x2
+int8 y2
+---
+bool bump

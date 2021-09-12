@@ -1,0 +1,8 @@
+<launch>
+	<group ns="ece642rtle1">
+	       <node pkg="ece642rtle" name="sim" type="ece642rtle_node"/>
+	</group>
+	<group ns="ece642rtle2">
+	       <node pkg="ece642rtle" name="sim" type="ece642rtle_node"/>
+	</group>
+</launch>
