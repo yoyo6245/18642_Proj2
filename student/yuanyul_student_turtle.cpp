@@ -41,7 +41,7 @@ bool studentMoveTurtle(QPointF &pos_, int &nw_or) {
 
   // ROS_INFO("Turtle update Called  w=%f", w);
   mod = true;
-  if (w == Right) {
+  if (w == 0) {
     fx1 = pos_.x();
     fy1 = pos_.y();
     fx2 = pos_.x();
@@ -61,6 +61,7 @@ bool studentMoveTurtle(QPointF &pos_, int &nw_or) {
     }
     bp = bumped(fx1, fy1, fx2, fy2);  // try sensor
     aend = atend(pos_.x(), pos_.y()); // check new pos
+		// cs = state  0: initial 1: will bump 2: wont bump
     if (nw_or == Right) 			// last: look right
       if (cs == 2) {
         nw_or = Back;
@@ -97,8 +98,10 @@ bool studentMoveTurtle(QPointF &pos_, int &nw_or) {
         cs = 0;
       } else
         cs = 2;
+
     ROS_INFO("Orientation=%f  STATE=%f", nw_or, cs);
-    z = cs == 2;
+    
+		z = cs == 2;
     mod = true;
     if (z == true && aend == false) {
       if (nw_or == Left)
