@@ -24,6 +24,13 @@ float w, cs;              // w: time counter   cs: state
 float fx1, fy1, fx2, fy2; // 1: start  2: end
 float z, aend, mod, bp, q;
 
+enum direction {
+	Right = 0,
+	Left = 1,
+	Forward = 2,
+	Back = 3
+};
+
 // this procedure takes the current turtle position and orientation and returns
 // true=submit changes, false=do not submit changes
 // Ground rule -- you are only allowed to call the helper functions "bumped(..)"
@@ -34,13 +41,13 @@ bool studentMoveTurtle(QPointF &pos_, int &nw_or) {
 
   // ROS_INFO("Turtle update Called  w=%f", w);
   mod = true;
-  if (w == 0) {
+  if (w == Right) {
     fx1 = pos_.x();
     fy1 = pos_.y();
     fx2 = pos_.x();
     fy2 = pos_.y();
     if (nw_or < 2)
-      if (nw_or == 0) // nw_or == 0 look right
+      if (nw_or == Right) // nw_or == 0 look right
         fy2 += 1;
       else // nw_or == 1 look left
         fx2 += 1;
