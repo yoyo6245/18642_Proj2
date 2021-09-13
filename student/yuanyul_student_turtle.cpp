@@ -54,46 +54,46 @@ bool studentMoveTurtle(QPointF &pos_, int &nw_or) {
     else { // nw_or >= 2
       fx2 += 1;
       fy2 += 1;
-      if (nw_or == 2) // nw_or == 2 move forward
+      if (nw_or == Forward) // nw_or == 2 move forward
         fx1 += 1;
       else
         fy1 += 1;
     }
     bp = bumped(fx1, fy1, fx2, fy2);  // try sensor
     aend = atend(pos_.x(), pos_.y()); // check new pos
-    if (nw_or == 0) 			// last: look right
+    if (nw_or == Right) 			// last: look right
       if (cs == 2) {
-        nw_or = 3;
+        nw_or = Back;
         cs = 1;
       } else if (bp) {			// look left
-        nw_or = 1;
+        nw_or = Left;
         cs = 0;
       } else
         cs = 2;
-    else if (nw_or == 1)	// last: look left
+    else if (nw_or == Left)	// last: look left
       if (cs == 2) {
-        nw_or = 0;
+        nw_or = Right;
         cs = 1;
       } else if (bp) {			// if can bump -> move forward
-        nw_or = 2;
+        nw_or = Forward;
         cs = 0;
       } else
         cs = 2;
-    else if (nw_or == 2)	// last: move forward
+    else if (nw_or == Forward)	// last: move forward
       if (cs == 2) {
-        nw_or = 1;
+        nw_or = Left;
         cs = 1;
       } else if (bp) {			// if can bump -> ?
-        nw_or = 3;
+        nw_or = Back;
         cs = 0;
       } else
         cs = 2;
-    else if (nw_or == 3)
+    else if (nw_or == Back)
       if (cs == 2) {
-        nw_or = 2;
+        nw_or = Forward;
         cs = 1;
       } else if (bp) {
-        nw_or = 0;
+        nw_or = Right;
         cs = 0;
       } else
         cs = 2;
@@ -101,13 +101,13 @@ bool studentMoveTurtle(QPointF &pos_, int &nw_or) {
     z = cs == 2;
     mod = true;
     if (z == true && aend == false) {
-      if (nw_or == 1)
+      if (nw_or == Left)
         pos_.setY(pos_.y() - 1);
-      if (nw_or == 2)
+      if (nw_or == Forward)
         pos_.setX(pos_.x() + 1);
-      if (nw_or == 3)
+      if (nw_or == Back)
         pos_.setY(pos_.y() + 1);
-      if (nw_or == 0)
+      if (nw_or == Right)
         pos_.setX(pos_.x() - 1);
       z = false;
       mod = true;
