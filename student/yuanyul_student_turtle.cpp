@@ -12,7 +12,8 @@
  */
 
 #include "student.h"
-
+#include "types.h"
+  
 // Ignore this line until project 5
 turtleMove studentTurtleStep(bool bumped) { return MOVE; }
 
@@ -20,109 +21,142 @@ turtleMove studentTurtleStep(bool bumped) { return MOVE; }
 
 #define TIMEOUT                                                                \
   40 // bigger number slows down simulation so you can see what's happening
-float w, cs;              // w: time counter   cs: state
-float fx1, fy1, fx2, fy2; // 1: start  2: end
-float z, aend, mod, bp, q;
-
-enum direction {
-	Right = 0,
-	Left = 1,
-	Forward = 2,
-	Back = 3
-};
+//float time_cnt, state;              // w: time counter   cs: state
+//float fx1, fy1, fx2, fy2; // 1: start  2: end
+//float pass_flag, reach_goal, bump_sensor;
 
 // this procedure takes the current turtle position and orientation and returns
 // true=submit changes, false=do not submit changes
 // Ground rule -- you are only allowed to call the helper functions "bumped(..)"
 // and "atend(..)",
 // and NO other turtle methods or maze methods (no peeking at the maze!)
-bool studentMoveTurtle(QPointF &pos_, int &nw_or) {
+bool studentMoveTurtle(QPointF &pos_, int &now_orientation) {
   // nw_or = orientation 0:look right 1:look left 2:move forward
 
   // ROS_INFO("Turtle update Called  w=%f", w);
-  mod = true;
-  if (w == 0) {
-    fx1 = pos_.x();
-    fy1 = pos_.y();
-    fx2 = pos_.x();
-    fy2 = pos_.y();
-    if (nw_or < 2)
-      if (nw_or == Right) // nw_or == 0 look right
-        fy2 += 1;
-      else // nw_or == 1 look left
-        fx2 += 1;
-    else { // nw_or >= 2
-      fx2 += 1;
-      fy2 += 1;
-      if (nw_or == Forward) // nw_or == 2 move forward
-        fx1 += 1;
-      else
-        fy1 += 1;
+  //mod = true;
+  static STATE state;
+  static TIME_CNT time_cnt;
+  static POSITION pos_start, pos_next;
+  static bool pass_flag, reach_goal, bump_sensor;
+  if (time_cnt == 0) {
+    pos_start.x = pos_.x();
+    pos_start.y = pos_.y();
+    pos_next.x = pos_.x();
+    pos_next.y = pos_.y();
+    switch(now_orientation){
+      case Right:
+        pos_next.y += 1;
+        break;
+      case Left:
+        pos_next.x += 1;
+        break;
+      case Forward:
+        pos_start.x += 1;
+        pos_next.x += 1;
+        pos_next.y += 1;
+        break;
+      case Back:
+        pos_start.y += 1;
+        pos_next.x += 1;
+        pos_next.y += 1;
+        break;
+      default:
+        ROS_ERROR("now_orientation is out of range.");
+        break;
     }
-    bp = bumped(fx1, fy1, fx2, fy2);  // try sensor
-    aend = atend(pos_.x(), pos_.y()); // check new pos
+    // check if there is a wall between (fx1, fy1) and (fx2, fy2)
+    bump_sensor = bumped(pos_start.x, pos_start.y, pos_next.x, pos_next.y);
+    // check if (x, y) is the end cell of the maze
+    reach_goal = atend(pos_.x(), pos_.y()); 
 		// cs = state  0: initial 1: will bump 2: wont bump
-    if (nw_or == Right) 			// last: look right
-      if (cs == 2) {
-        nw_or = Back;
-        cs = 1;
-      } else if (bp) {			// look left
-        nw_or = Left;
-        cs = 0;
-      } else
-        cs = 2;
-    else if (nw_or == Left)	// last: look left
-      if (cs == 2) {
-        nw_or = Right;
-        cs = 1;
-      } else if (bp) {			// if can bump -> move forward
-        nw_or = Forward;
-        cs = 0;
-      } else
-        cs = 2;
-    else if (nw_or == Forward)	// last: move forward
-      if (cs == 2) {
-        nw_or = Left;
-        cs = 1;
-      } else if (bp) {			// if can bump -> ?
-        nw_or = Back;
-        cs = 0;
-      } else
-        cs = 2;
-    else if (nw_or == Back)
-      if (cs == 2) {
-        nw_or = Forward;
-        cs = 1;
-      } else if (bp) {
-        nw_or = Right;
-        cs = 0;
-      } else
-        cs = 2;
+    switch(now_orientation){
+      case (Right):
+        if (state == Wont_bump) {
+          now_orientation = Back;
+          state = Initial;
+        } else if (bump_sensor) {			// look left
+          now_orientation = Left;
+          state = Bump;
+        } else {
+          state = Wont_bump;
+        }
+        break;
+      case (Left):
+        if (state == Wont_bump) {
+          now_orientation = Right;
+          state = Initial;
+        } else if (bump_sensor) {			// if can bump -> move forward
+          now_orientation = Forward;
+          state = Bump;
+        } else {
+          state = Wont_bump;
+        }
+        break;
+      case (Forward):
+        if (state == Wont_bump) {
+          now_orientation = Left;
+          state = Initial;
+        } else if (bump_sensor) {	
+          now_orientation = Back;
+          state = Bump;
+        } else {
+          state = Wont_bump;
+        }
+        break;
+      case (Back):
+        if (state == Wont_bump) {
+          now_orientation = Forward;
+          state = Initial;
+        } else if (bump_sensor) {
+          now_orientation = Right;
+          state = Bump;
+        } else {
+          state = Wont_bump;
+        }
+        break;
+      default:
+        ROS_ERROR("now_orientation is out of range.");
+        break;
+    }
 
-    ROS_INFO("Orientation=%f  STATE=%f", nw_or, cs);
+    ROS_INFO("Orientation=%d  STATE=%d", now_orientation, state);
     
-		z = cs == 2;
-    mod = true;
-    if (z == true && aend == false) {
-      if (nw_or == Left)
-        pos_.setY(pos_.y() - 1);
-      if (nw_or == Forward)
-        pos_.setX(pos_.x() + 1);
-      if (nw_or == Back)
-        pos_.setY(pos_.y() + 1);
-      if (nw_or == Right)
-        pos_.setX(pos_.x() - 1);
-      z = false;
-      mod = true;
+		pass_flag = state == Wont_bump;
+    //mod = true;
+    if (pass_flag == true && reach_goal == false) {
+      switch(now_orientation){
+        case(Left): 
+          pos_.setY(pos_.y() - 1);
+          break;
+        case(Forward):
+          pos_.setX(pos_.x() + 1);
+          break;
+        case(Back):
+          pos_.setY(pos_.y() + 1);
+          break;
+        case(Right):
+          pos_.setX(pos_.x() - 1);
+          break;
+        default:
+          ROS_ERROR("now_orientation is out of range.");
+          break;
+      }
+      pass_flag = false;
+      //mod = true;
     }
   }
-  if (aend)
+  if (reach_goal) {
     return false;
-  if (w == 0)
-    w = TIMEOUT;
-  else
-    w -= 1;
-  if (w == TIMEOUT)
+  }
+  if (time_cnt == 0) {
+    time_cnt = TIMEOUT;
+  }
+  else {
+    time_cnt -= 1;
+  }
+  if (time_cnt == TIMEOUT) {
     return true;
+  }
   return false;
 }
