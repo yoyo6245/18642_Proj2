@@ -16,10 +16,10 @@ void displayVisits(int visits);
 bool moveTurtle(QPointF& pos_, int& nw_or);
 
 // Scope-preserving changes to these lines permitted (see p5 writeup)
-enum turtleMove {MOVE};
+enum turtleMove {NO_MOVE = 0, MOVE, LEFT, RIGHT};
 QPointF translatePos(QPointF pos_, turtleMove nextMove);
 int translateOrnt(int orientation, turtleMove nextMove);
-turtleMove studentTurtleStep(bool bumped);
+turtleMove studentTurtleStep(bool bumped, bool atend);
 
 // OK to change below this line
 bool studentMoveTurtle(QPointF& pos_, int& nw_or);
