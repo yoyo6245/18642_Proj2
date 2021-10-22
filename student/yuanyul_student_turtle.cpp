@@ -12,7 +12,7 @@
  */
 
 #include "student.h"
-#include "type.h" 
+#include "yuanyul_type.h" 
 
 static int time_cnt = 0;
 static int turtle_map[MAP_SIZE][MAP_SIZE];

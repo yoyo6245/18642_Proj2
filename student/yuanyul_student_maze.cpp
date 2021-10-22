@@ -22,7 +22,7 @@
  */
 
 #include "student.h"
-#include "type.h"
+#include "yuanyul_type.h"
 
 static Position pos_start, pos_next;
 static Orientation static_or;
