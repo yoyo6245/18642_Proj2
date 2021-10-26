@@ -64,7 +64,7 @@ add_dependencies(ece642rtle_node ece642rtle_gencpp)
 
 add_executable(ece642rtle_student ${ece642rtle_student_SRCS})
 
-set(proj8_flags false)
+set(proj8_flags true)
 
 if(proj8_flags)
 # Warning flags for Projects 8,9,10

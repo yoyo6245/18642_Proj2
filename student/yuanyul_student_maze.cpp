@@ -41,10 +41,10 @@ static Orientation static_or;
   *@param pos_next: the position of next point
   */
 void next_pos(QPointF &pos_, int now_orientation){
-  pos_start.x = pos_.x();
-  pos_start.y = pos_.y();
-  pos_next.x = pos_.x();
-  pos_next.y = pos_.y();
+  pos_start.x = (int)pos_.x();
+  pos_start.y = (int)pos_.y();
+  pos_next.x = (int)pos_.x();
+  pos_next.y = (int)pos_.y();
   static_or = static_cast<Orientation>(now_orientation);
   switch(static_or){
     case Left:
@@ -87,7 +87,7 @@ bool bump_sensor(QPointF &pos_, int now_orientation){
 bool moveTurtle(QPointF& pos_, int& now_orientation)
 {
   bool bumped = bump_sensor(pos_, now_orientation); // Replace with your own procedure
-  bool at_end = atend(pos_.x(), pos_.y());
+  bool at_end = atend((int)pos_.x(), (int)pos_.y());
   bool move_turtle = false;
 
   turtleMove nextMove = studentTurtleStep(bumped, at_end); // define your own turtleMove enum or structure
@@ -95,7 +95,7 @@ bool moveTurtle(QPointF& pos_, int& now_orientation)
     move_turtle = true;
     pos_ = translatePos(pos_, nextMove);
     now_orientation = translateOrnt(now_orientation, nextMove);
-    ROS_INFO("abs x: %f, y: %f, orientation: %d", pos_.x(), pos_.y(), now_orientation);
+    //ROS_INFO("abs x: %f, y: %f, orientation: %d", pos_.x(), pos_.y(), now_orientation);
   }
   // REPLACE THE FOLLOWING LINE IN PROJECT 5
   return move_turtle;
@@ -110,19 +110,19 @@ bool moveTurtle(QPointF& pos_, int& now_orientation)
 QPointF update_pos(QPointF &pos_){
   switch(static_or){
     case(Left):
-      ROS_INFO("MOVE LEFT!");
+      //ROS_INFO("MOVE LEFT!");
       pos_.setX(pos_.x() - 1);
       break;
     case(Up):
-      ROS_INFO("MOVE UP!");
+      //ROS_INFO("MOVE UP!");
       pos_.setY(pos_.y() - 1);
       break;
     case(Right):
-      ROS_INFO("MOVE RIGHT!");
+      //ROS_INFO("MOVE RIGHT!");
       pos_.setX(pos_.x() + 1);
       break;
     case(Down):
-      ROS_INFO("MOVE DOWN!");
+      //ROS_INFO("MOVE DOWN!");
       pos_.setY(pos_.y() + 1);
       break;
     default:
