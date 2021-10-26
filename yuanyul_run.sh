@@ -1,4 +1,5 @@
 #!/bin/bash
+source ~/catkin_ws/devel/setup.bash
 maze_num=""
 echo "$1"
 maze_num=m$1.maze
