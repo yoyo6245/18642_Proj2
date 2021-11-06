@@ -27,62 +27,15 @@ static int time_cnt = 0;
 static int turtle_map[MAP_SIZE][MAP_SIZE];
 static Position relative_pos(INI_POS, INI_POS);
 static STATE state = Detect;
-static Orientation relative_orientation = Left;
+static int relative_orientation = Left;
 static stack<Position> track;
 static int turn_cnt;
-
-/**
-  *@brief Set Orientation for unit test
-  */
-void setOrientation(Orientation new_Orientation){
-  relative_orientation = new_Orientation;
-  return;
-}
-
-/**
-  *@brief return Orientation for unit test
-  */
-Orientation getOrientation(){
-  return relative_orientation;
-}
-
-/**
-  *@brief set state for unit test
-  */
-void setState(STATE new_state){
-  state = new_state;
-  return;
-}
-
-/**
-  *@brief return state for unit test
-  */
-STATE getState(){
-  return state;
-}
 
 /**
   *@brief Let the turtle turn right based on its orientation
   */
 void turn_right(){
-  switch (relative_orientation){
-    case(Left):
-      relative_orientation = Up;
-      break;
-    case(Up):
-      relative_orientation = Right;
-      break;
-    case(Right):
-      relative_orientation = Down;
-      break;
-    case(Down):
-      relative_orientation = Left;
-      break;
-    default:
-      ROS_ERROR("relative_orientation is out of range!");
-      break;
-  }
-  //relative_orientation = (relative_orientation + 1) % DIRECTIONS;
+  relative_orientation = (relative_orientation + 1) % DIRECTIONS;
   turn_cnt++;
   return ;
 }
@@ -91,24 +44,7 @@ void turn_right(){
   *@brief Let the turtle turn left based on its orientation
   */
 void turn_left(){
-  switch (relative_orientation){
-    case(Left):
-      relative_orientation = Down;
-      break;
-    case(Up):
-      relative_orientation = Left;
-      break;
-    case(Right):
-      relative_orientation = Up;
-      break;
-    case(Down):
-      relative_orientation = Right;
-      break;
-    default:
-      ROS_ERROR("relative_orientation is out of range!");
-      break;
-  }
-  //relative_orientation = (relative_orientation + DIRECTIONS - 1) % DIRECTIONS;
+  relative_orientation = (relative_orientation + DIRECTIONS - 1) % DIRECTIONS;
   turn_cnt++;
   return ;
 }

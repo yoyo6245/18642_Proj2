@@ -1,0 +1,43 @@
+/*
+ * Originally by Philip Koopman (koopman@cmu.edu)
+ * and Milda Zizyte (milda@cmu.edu)
+ * 
+ * STUDENT NAME:YUAN-YU LEE
+ * ANDREW ID:yuanyul
+ * LAST UPDATE:2021/11/05
+ *
+ * This file is an algorithm to solve the ece642rtle maze
+ * using the left-hand rule. The code is intentionaly left obfuscated.
+ *
+ */
+
+#include "student_mock.h"
+#include <iostream>
+
+static orientation mock_orientation;
+static bool mock_bump;
+static bool mock_error = false;
+
+/* Functions called by dummy_turtle */
+void setOrientation(orientation ornt) {
+  mock_orientation = ornt;
+}
+
+bool will_bump() {
+  return mock_bump;
+}
+
+/* Functions used to instrument CUnit tests */
+orientation test_orientation_result() {
+  return mock_orientation;
+}
+
+void mock_set_bump(bool bump) {
+  mock_bump = bump;
+}
+
+/* Dummy ROS_ERROR */
+void ROS_ERROR(std::string e) {
+  mock_error = true;
+  std::cout << e << std::endl;
+}
