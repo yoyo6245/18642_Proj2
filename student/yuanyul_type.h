@@ -1,3 +1,11 @@
+/*   
+ *
+ * STUDENT NAME:YUAN-YU LEE         
+ * ANDREW ID:yuanyul                                            
+ * LAST UPDATE:2021/11/05          
+ *                                      
+ */
+
 /**
   * @brief struct to store pair for coordinated.
   *
@@ -20,7 +28,7 @@ typedef struct Position {
   *
   */
 typedef enum orientation {
-  Left, Up, Right, Down
+  Left, Up, Right, Down, Error_orientation
 }Orientation;
 
 
@@ -34,7 +42,7 @@ typedef enum orientation {
   *
   */
 typedef enum state{
-  Bump, Initial, Wont_bump, Detect, Go_back
+  Bump, Initial, Wont_bump, Detect, Go_back, Error_state
 }STATE;
 
 int get_now_visit();

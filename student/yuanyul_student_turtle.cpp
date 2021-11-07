@@ -24,12 +24,29 @@
 using namespace std;
 
 static int time_cnt = 0;
+static int turn_back_flag = 3;
 static int turtle_map[MAP_SIZE][MAP_SIZE];
 static Position relative_pos(INI_POS, INI_POS);
 static STATE state = Detect;
 static Orientation relative_orientation = Left;
 static stack<Position> track;
 static int turn_cnt;
+
+/**
+  *@brief Set time_cnt for unit test
+  */
+void setTime_cnt(int new_time_cnt){
+  time_cnt = new_time_cnt;
+  return;
+}
+
+/**
+  *@brief Set turn_cnt for unit test
+  */
+void setTurn_cnt(int new_turn_cnt){
+  turn_cnt = new_turn_cnt;
+  return;
+}
 
 /**
   *@brief Set Orientation for unit test
@@ -165,6 +182,13 @@ void new_update_position(){
 }
 
 /**
+  *@brief get the relative position of thr turtle
+  */
+Position get_position(){
+  return relative_pos;
+}
+
+/**
   *@brief return the position the turtle facing
   */
 Position get_facing_pos(){
@@ -198,6 +222,15 @@ bool get_facing_visited(){
   return  get_turtle_visit(facing_pos.x, facing_pos.y) > 0;
 }
 
+
+/**
+  *@brief set the cell that turtle facing is visited or not
+  */
+void set_came_from(){
+  track.push(get_facing_pos());
+  return;
+}
+
 /**
   *@brief check the cell that turtle facing is the cell it came from
   */
@@ -213,25 +246,25 @@ bool check_came_from(){
 turtleMove handleBump(){
   state = Detect;
   turn_left();
-  return turtleMove::LEFT;
+  return LEFT;
 }
 
 turtleMove handleInitial(){
   state = Detect;
   turn_right();
-  return turtleMove::RIGHT;
+  return RIGHT;
 }
 
 turtleMove handleMove(){
   state = Initial;
   track.push(relative_pos);
-  ROS_INFO("push: %d, %d", relative_pos.x, relative_pos.y);
+  //ROS_INFO("push: %d, %d", relative_pos.x, relative_pos.y);
   new_update_position();
-  return turtleMove::MOVE;
+  return MOVE;
 }
 
 turtleMove handleDetect(bool bumped){
-  if(turn_cnt > 3 && check_came_from()){
+  if(turn_cnt > turn_back_flag && check_came_from()){
     state = Go_back;
   }
   else if(bumped || get_facing_visited()){
@@ -240,7 +273,7 @@ turtleMove handleDetect(bool bumped){
   else{
     state = Wont_bump;
   }
-  return turtleMove::NO_MOVE;
+  return NO_MOVE;
 }
 
 turtleMove handleGoback(){
@@ -248,7 +281,7 @@ turtleMove handleGoback(){
   track.pop();
   ROS_INFO("Go back!");
   new_update_position();
-  return turtleMove::MOVE;
+  return MOVE;
 }
 
 /**
@@ -267,7 +300,7 @@ bool tiktok(){
 
 // Ignore this line until project 5
 turtleMove studentTurtleStep(bool bumped, bool atend) {
-  turtleMove final_move = turtleMove::NO_MOVE;
+  turtleMove final_move = NO_MOVE;
   if(atend){
     return final_move; 
   }
@@ -300,13 +333,13 @@ turtleMove studentTurtleStep(bool bumped, bool atend) {
         break;
     }
   }
-  if(final_move != turtleMove::NO_MOVE){
+  if(final_move != NO_MOVE){
     //ROS_INFO("Orientation=%d  STATE=%d rela_x: %d, rela_y: %d", relative_orientation, state, relative_pos.x, relative_pos.y);
   }
   
   bool reset_time_cnt = tiktok();
   if(!reset_time_cnt){
-    final_move = turtleMove::NO_MOVE;
+    final_move = NO_MOVE;
   }
 
   return final_move; 

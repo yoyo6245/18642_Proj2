@@ -4,7 +4,7 @@
  *
  * STUDENT NAME:Yuan-Yu Lee
  * ANDREW ID:yuanyul
- * LAST UPDATE:9/26
+ * LAST UPDATE:11/5
  *
  * This file keeps track of where the turtle is in the maze
  * and updates the location when the turtle is moved. It shall not
