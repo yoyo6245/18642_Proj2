@@ -1,0 +1,12 @@
+
+Monitor ece642rtle_turn_monitor Violations:
+
+[0m[ INFO] [1636753438.943260177]: Connected to master at [localhost:11311][0m
+[0m[ INFO] [1636753454.854456968]: [[1636753454854155584 ns]] 'Turn' was sent. Data: orientation = ?$e[0m
+[0m[ INFO] [1636753455.159039008]: [[1636753455158762438 ns]] 'Turn' was sent. Data: orientation = ?$e[0m
+[0m[ INFO] [1636753455.736888142]: [[1636753455736791055 ns]] 'Turn' was sent. Data: orientation = ?$e[0m
+[0m[ INFO] [1636753456.631631142]: [[1636753456631311467 ns]] 'Turn' was sent. Data: orientation = ?$e[0m
+[0m[ INFO] [1636753457.208556858]: [[1636753457208460320 ns]] 'Turn' was sent. Data: orientation = ?$e[0m
+[0m[ INFO] [1636753457.782044482]: [[1636753457782043350 ns]] 'Turn' was sent. Data: orientation = ?$e[0m
+[0m[ INFO] [1636753458.647276318]: [[1636753458647110548 ns]] 'Turn' was sent. Data: orientation = ?$e[0m
+

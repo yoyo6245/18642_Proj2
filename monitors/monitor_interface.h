@@ -41,3 +41,4 @@ void bumpInterrupt(ros::Time t, int x1, int y1, int x2, int y2, bool bumped);
 // Occurs every time a call to atend(x,y) returns
 // (t is the time of the server request, not answer)
 void atEndInterrupt(ros::Time t, int x, int y, bool atEnd);
+//void turnInterrupt(ros::Time t, Orientation o);
